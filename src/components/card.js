@@ -2,7 +2,7 @@ const createCard = (template, data, onDelete, onLike, onImageClick) => {
   const element = template.querySelector('.card').cloneNode(true);
 
   const image = element.querySelector('.card__image');
-  image.addEventListener('click', onImageClick);
+  image.addEventListener('click', () => onImageClick(data.name, data.link));
   image.src = data.link;
   image.alt = data.name;
 

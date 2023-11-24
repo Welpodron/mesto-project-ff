@@ -1,10 +1,14 @@
-import './pages/index.css';
+import './index.css';
 
-import { INITIAL_CARDS } from './components/cards.js';
+import { INITIAL_CARDS } from '../components/cards.js';
 
-import { closeModal, openModal } from './components/modal.js';
+import {
+  closeModal,
+  openModal,
+  handleModalClick,
+} from '../components/modal.js';
 
-import { createCard, deleteCard, likeCard } from './components/card.js';
+import { createCard, deleteCard, likeCard } from '../components/card.js';
 
 const popupImage = document.querySelector('.popup_type_image');
 const popupImageCaption = popupImage.querySelector('.popup__caption');
@@ -30,10 +34,10 @@ const profileDescriptionInput = profileForm.elements.description;
 const popupProfile = document.querySelector('.popup_type_edit');
 const popupProfileButtonOpen = document.querySelector('.profile__edit-button');
 
-const handleCardImageClick = (event) => {
-  popupImageImage.src = event.currentTarget.src;
-  popupImageImage.alt = event.currentTarget.alt;
-  popupImageCaption.textContent = event.currentTarget.alt;
+const handleCardImageClick = (cardName, cardLink) => {
+  popupImageImage.src = cardLink;
+  popupImageImage.alt = cardName;
+  popupImageCaption.textContent = cardName;
 
   openModal(popupImage);
 };
@@ -83,10 +87,14 @@ const handlePopupCardButtonOpenClick = () => {
 
 cardForm.addEventListener('submit', handleCardFormSubmit);
 
-popupCardButtonOpen.addEventListener('click', handlePopupCardButtonOpenClick);
-
 profileForm.addEventListener('submit', handleProfileFormSubmit);
 
+popupImage.addEventListener('click', handleModalClick);
+
+popupCard.addEventListener('click', handleModalClick);
+popupCardButtonOpen.addEventListener('click', handlePopupCardButtonOpenClick);
+
+popupProfile.addEventListener('click', handleModalClick);
 popupProfileButtonOpen.addEventListener(
   'click',
   handlePopupProfileButtonOpenClick
