@@ -21,7 +21,7 @@ import {
 
 import { clearValidation, enableValidation } from '../components/validation.js';
 
-const VALIDATION_CONFIG = {
+const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
@@ -73,12 +73,10 @@ const setProfile = ({ name, description, avatar }) => {
   profileImage.style.backgroundImage = `url(${avatar})`;
 };
 
-const toggleSubmitButtonState = ({ buttonElement, isSubmitting }) => {
-  if (isSubmitting) {
-    buttonElement.disabled = true;
+const renderLoading = ({ buttonElement, isLoading }) => {
+  if (isLoading) {
     buttonElement.textContent = 'Сохранение...';
   } else {
-    buttonElement.disabled = false;
     buttonElement.textContent = 'Сохранить';
   }
 };
@@ -141,9 +139,9 @@ const handleCardDelete = ({ cardId, buttonElement }) => {
 const handleCardFormSubmit = (event) => {
   event.preventDefault();
 
-  toggleSubmitButtonState({
+  renderLoading({
     buttonElement: cardFormSubmitButton,
-    isSubmitting: true,
+    isLoading: true,
   });
 
   APICreateCard({
@@ -170,9 +168,9 @@ const handleCardFormSubmit = (event) => {
       console.error(error);
     })
     .finally(() => {
-      toggleSubmitButtonState({
+      renderLoading({
         buttonElement: cardFormSubmitButton,
-        isSubmitting: false,
+        isLoading: false,
       });
     });
 };
@@ -180,9 +178,9 @@ const handleCardFormSubmit = (event) => {
 const handleProfileFormSubmit = (event) => {
   event.preventDefault();
 
-  toggleSubmitButtonState({
+  renderLoading({
     buttonElement: profileFormSubmitButton,
-    isSubmitting: true,
+    isLoading: true,
   });
 
   APIUpdateUserInfo({
@@ -202,9 +200,9 @@ const handleProfileFormSubmit = (event) => {
       console.error(error);
     })
     .finally(() => {
-      toggleSubmitButtonState({
+      renderLoading({
         buttonElement: profileFormSubmitButton,
-        isSubmitting: false,
+        isLoading: false,
       });
     });
 };
@@ -212,9 +210,9 @@ const handleProfileFormSubmit = (event) => {
 const handleProfileImageFormSubmit = (event) => {
   event.preventDefault();
 
-  toggleSubmitButtonState({
+  renderLoading({
     buttonElement: profileImageFormSubmitButton,
-    isSubmitting: true,
+    isLoading: true,
   });
 
   APIUpdateUserAvatar(profileImageInput.value)
@@ -231,9 +229,9 @@ const handleProfileImageFormSubmit = (event) => {
       console.error(error);
     })
     .finally(() => {
-      toggleSubmitButtonState({
+      renderLoading({
         buttonElement: profileImageFormSubmitButton,
-        isSubmitting: false,
+        isLoading: false,
       });
     });
 };
@@ -242,7 +240,7 @@ const handlePopupProfileButtonOpenClick = () => {
   profileNameInput.value = profileName.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
 
-  clearValidation(profileForm, VALIDATION_CONFIG);
+  clearValidation(profileForm, validationConfig);
 
   openModal(popupProfile);
 };
@@ -250,7 +248,7 @@ const handlePopupProfileButtonOpenClick = () => {
 const handlePopupCardButtonOpenClick = () => {
   cardForm.reset();
 
-  clearValidation(cardForm, VALIDATION_CONFIG);
+  clearValidation(cardForm, validationConfig);
 
   openModal(popupCard);
 };
@@ -266,7 +264,7 @@ const handleCardImageClick = ({ cardName, cardLink }) => {
 const handleProfileImageClick = () => {
   profileImageForm.reset();
 
-  clearValidation(profileImageForm, VALIDATION_CONFIG);
+  clearValidation(profileImageForm, validationConfig);
 
   openModal(popupProfileImage);
 };
@@ -294,7 +292,7 @@ popupProfileButtonOpen.addEventListener(
 
 popupConfirm.addEventListener('click', handleModalClick);
 
-enableValidation(VALIDATION_CONFIG);
+enableValidation(validationConfig);
 
 Promise.all([APIGetUserInfo(), APIGetInitialCards()])
   .then(([{ name, about, avatar, ['_id']: currentUserId }, cardsData]) => {
