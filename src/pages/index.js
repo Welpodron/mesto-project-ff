@@ -125,13 +125,12 @@ const handleCardDelete = ({ cardId, buttonElement }) => {
     APIDeleteCard(cardId)
       .then(() => {
         buttonElement.closest('.card').remove();
+
+        closeModal(popupConfirm);
       })
       .catch((error) => {
         buttonElement.disabled = false;
         console.error(error);
-      })
-      .finally(() => {
-        closeModal(popupConfirm);
       });
   };
 };
